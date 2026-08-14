@@ -3,126 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ma Love Day</title>
-
+  <title>Birthday</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; font-family: 'Arial', sans-serif; }
     body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #d6a3a7;
-      font-family: Georgia, serif;
+      margin: 0; min-height: 100vh; display: flex;
+      justify-content: center; align-items: center;
+      background-color: #f4f4f4; padding: 20px;
     }
-
+    .music-btn {
+      position: fixed; top: 15px; right: 15px; background: #333; color: white;
+      border: none; border-radius: 5px; padding: 8px 12px; font-size: 12px;
+      cursor: pointer; z-index: 100;
+    }
     .card {
-      width: 88%;
-      max-width: 620px;
-      min-height: 650px;
-      padding: 45px 35px;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 8px 25px rgba(0,0,0,.12);
+      background: #ffffff; width: 100%; max-width: 400px; min-height: 400px;
+      padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      display: flex; flex-direction: column; justify-content: space-between;
     }
-
-    h1 {
-      margin: 0;
-      text-align: center;
-      font-size: 28px;
-      font-style: italic;
-      color: #382424;
-    }
-
-    .subtitle {
-      margin-top: 18px;
-      text-align: center;
-      font-size: 19px;
-      color: #9b6b6d;
-    }
-
-    hr {
-      margin: 35px 0 80px;
-      border: 0;
-      border-top: 2px solid #9b6b6d;
-    }
-
-    .letter {
-      color: #333;
-      font-size: 17px;
-      line-height: 1.8;
-    }
-
-    .letter p {
-      margin-bottom: 28px;
-    }
-
-    .sign {
-      margin-top: 100px;
-      text-align: right;
-      font-size: 20px;
-      font-style: italic;
-      color: #8b5b5f;
-    }
-
-    button {
-      display: block;
-      margin: 60px auto 0;
-      padding: 16px 55px;
-      border: 0;
-      border-radius: 12px;
-      background: #5d2c2c;
-      color: white;
-      font-size: 15px;
-      letter-spacing: 2px;
-      cursor: pointer;
-    }
+    .slide { display: none; }
+    .slide.active { display: block; animation: fadeIn 0.3s ease; }
+    h1 { color: #333; font-size: 22px; margin-bottom: 10px; }
+    p { color: #666; line-height: 1.5; font-size: 14px; margin-bottom: 15px; }
+    ul { color: #666; font-size: 14px; padding-left: 20px; }
+    .nav-buttons { display: flex; gap: 10px; margin-top: 20px; }
+    button.nav-btn { background: #333; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; flex: 1; }
+    button.nav-btn:disabled { background: #ccc; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
-
 <body>
 
+  <button class="music-btn" onclick="toggleMusic()" id="musicBtn">🎵 Music</button>
+  <audio id="bgMusic" loop><source src="lagu.mp3" type="audio/mpeg"></audio>
+
   <div class="card">
+    <div id="slide-container">
+      
+      <div class="slide active">
+        <h1>Happy Birthday</h1>
+        <p>Hai, Adek.</p>
+        <p>Iseng bikin ini buat hari ini. Klik next ya.</p>
+      </div>
 
-    <h1>For you, Ma Love</h1>
+      <div class="slide">
+        <h1>A few things</h1>
+        <ul>
+          <li>Thanks for being around.</li>
+          <li>Your jokes are actually funny (sometimes).</li>
+          <li>Appreciate everything.</li>
+        </ul>
+      </div>
 
-    <div class="subtitle">
-      a little something for your birthday
+      <div class="slide">
+        <h1>Wish</h1>
+        <p>Semoga di umur baru ini sehat terus, makin lancar urusannya, dan makin bahagia.</p>
+        <p>Terus makin sayang aku, sama bandelnya ilang ya.</p>
+      </div>
+
+      <!-- Slide Penutup Akhir -->
+      <div class="slide">
+        <h1>Sekali lagi... 🎂</h1>
+        <p>Happy level up sayangg!</p>
+        <p>Enjoy ur moment, semoga hari ini banyak senengnya!</p>
+        <p>Eh, jangan lupa traktirannya ya! Haha. ✨</p>
+      </div>
+
     </div>
 
-    <hr>
-
-    <div class="letter">
-      <p>Hi, Ma Love.</p>
-
-      <p>
-        I wanted to make something small for your birthday.
-        Nothing too complicated, just something you can keep.
-      </p>
-
-      <p>
-        I hope you have a good day today.
-        That's all.
-      </p>
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>Back</button>
+      <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next ➔</button>
     </div>
-
-    <div class="sign">
-      from me,
-    </div>
-
-    <button onclick="nextPage()">NEXT</button>
-
   </div>
 
   <script>
-    function nextPage() {
-      alert("Coming next...");
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const music = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+
+    function toggleMusic() {
+      if (music.paused) { music.play(); musicBtn.innerHTML = "⏸️ Pause"; } 
+      else { music.pause(); musicBtn.innerHTML = "🎵 Music"; }
+    }
+
+    function changeSlide(direction) {
+      slides[currentSlide].classList.remove('active');
+      currentSlide += direction;
+      slides[currentSlide].classList.add('active');
+      prevBtn.disabled = (currentSlide === 0);
+      if (currentSlide === slides.length - 1) {
+        nextBtn.style.display = 'none';
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      } else { nextBtn.style.display = 'block'; }
     }
   </script>
-
 </body>
 </html>
+
