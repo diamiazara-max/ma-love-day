@@ -57,7 +57,7 @@
     <span class="bg-flower" style="bottom: 20%; left: 15%;">🌻</span>
     <span class="bg-flower" style="bottom: 10%; right: 20%;">🌷</span>
 
-    <audio id="myAudio" loop><source src="wave to earth - seasons(Lyrics).mp3" type="audio/mpeg"></audio>
+    <audio id="myAudio" loop><source src="lagu-kamu.mp3" type="audio/mpeg"></audio>
     <div class="music-btn" onclick="toggleMusic()">🎵</div>
 
     <!-- PIN Screen -->
@@ -100,7 +100,8 @@
     </div>
 
     <script>
-        const correctPin = "1508";
+        // Sesuai tanggal kamu 
+        const correctPin = "1308";
         const audio = document.getElementById('myAudio');
 
         function checkPin() {
@@ -112,6 +113,8 @@
                     document.getElementById('loading-screen').classList.remove('active');
                     document.getElementById('main-screen').classList.add('active');
                 }, 2000);
+            } else {
+                alert("PIN salah sayang!");
             }
         }
         function showMsg(msg) { document.getElementById('flower-msg').innerText = msg; }
@@ -119,3 +122,4 @@
     </script>
 </body>
 </html>
+
