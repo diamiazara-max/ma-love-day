@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For My Favorite Person</title>
     <!-- Font Elegan -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            /* Diubah jadi warna pastel romantis (soft cream & pink) */
-            background: linear-gradient(135deg, #fdfbf7 0%, #f8e1e7 100%);
+            /* Diubah jadi warna cream lembut */
+            background: linear-gradient(135deg, #fdfbf7 0%, #f4e8df 100%);
             color: #5d4037;
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
@@ -27,32 +27,42 @@
         .screen { display: none; width: 100%; max-width: 420px; padding: 20px; text-align: center; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; z-index: 10; }
         .active { display: flex !important; }
 
-        h1 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.8rem; color: #d81b60; letter-spacing: 2px; margin-bottom: 5px; }
-        .subtitle { font-family: 'Poppins', sans-serif; font-size: 0.8rem; opacity: 0.8; margin-bottom: 20px; }
+        h1 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.8rem; color: #a15c5d; letter-spacing: 2px; margin-bottom: 5px; }
+        .subtitle { font-family: 'Poppins', sans-serif; font-size: 0.8rem; opacity: 0.7; margin-bottom: 30px; }
 
-        .pin-box { background: rgba(255, 255, 255, 0.7); padding: 30px; border-radius: 20px; border: 1px solid rgba(248, 187, 208, 0.5); width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        input[type="password"] { width: 80%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid #f8bbd0; background: #fff; color: #5d4037; text-align: center; font-size: 1.2rem; outline: none; }
-        button { background: #d81b60; color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #ad1457; transform: scale(1.05); }
+        .pin-box { background: rgba(255, 255, 255, 0.6); padding: 30px; border-radius: 20px; border: 1px solid rgba(161, 92, 93, 0.2); width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        input[type="password"] { width: 80%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid rgba(161, 92, 93, 0.3); background: #fff; color: #5d4037; text-align: center; font-size: 1.2rem; outline: none; }
+        button { background: #a15c5d; color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #864849; transform: scale(1.05); }
 
-        .bouquet-cluster { font-size: 3rem; margin: 10px 0; cursor: pointer; }
+        .bouquet-cluster { font-size: 3rem; margin: 20px 0; cursor: pointer; }
         .flower-item { font-size: 2.5rem; cursor: pointer; margin: 5px; display: inline-block; transition: 0.3s; }
-        .flower-item:hover { transform: translateY(-5px) scale(1.2); }
+        .flower-item:hover { transform: scale(1.2); }
         
-        .msg-box { background: rgba(255, 255, 255, 0.6); padding: 15px; border-radius: 15px; border: 1px solid #f8bbd0; width: 100%; min-height: 60px; font-style: italic; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+        .msg-box { background: rgba(255, 255, 255, 0.6); padding: 20px; border-radius: 15px; border: 1px solid rgba(161, 92, 93, 0.2); width: 100%; min-height: 60px; font-style: italic; display: flex; align-items: center; justify-content: center; }
 
-        .letter-card { background: rgba(255, 255, 255, 0.8); padding: 25px; border-radius: 20px; border: 1px solid #f8bbd0; text-align: left; line-height: 1.6; font-size: 0.9rem; max-height: 250px; overflow-y: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
+        .letter-card { background: rgba(255, 255, 255, 0.7); padding: 30px; border-radius: 20px; border: 1px solid rgba(161, 92, 93, 0.2); text-align: left; line-height: 1.8; font-size: 0.95rem; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
 
-        /* Animasi Hati Melayang */
-        .heart { position: absolute; color: #ff80ab; font-size: 1.2rem; animation: float 6s linear infinite; pointer-events: none; z-index: 2; }
-        @keyframes float { 0% { transform: translateY(100vh); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-10vh); opacity: 0; } }
+        /* Animasi Bunga Bertebaran */
+        .falling-flower {
+            position: absolute;
+            top: -10vh;
+            font-size: 1.5rem;
+            animation: fall linear infinite;
+            pointer-events: none;
+            z-index: 2;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0.3; }
+        }
 
-        .music-btn { position: fixed; bottom: 20px; right: 20px; background: #d81b60; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 99; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .music-btn { position: fixed; bottom: 20px; right: 20px; background: #a15c5d; border: 1px solid rgba(255, 255, 255, 0.3); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 99; color: white; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
-    <div id="hearts-container"></div>
+    <div id="falling-flowers-container"></div>
 
     <span class="bg-flower" style="top: 10%; left: 10%;">🌸</span>
     <span class="bg-flower" style="top: 15%; right: 10%;">🌺</span>
@@ -94,13 +104,14 @@
         </div>
 
         <div class="msg-box" id="flower-msg">Touch each flower to reveal its message 💕</div>
+        <br>
         
         <div class="letter-card">
             <p><b>Hai adekk,</b></p>
             <p>On this very special day, I just want you to know how much your presence truly means to me. You have a way of making even the most ordinary days feel so much warmer and brighter.</p>
             <p>Thank you for always being my safe place, for your endless patience with me, and for never tiring of showing your support. Your kind heart and the gentle way you treat me are things I will forever be grateful for.</p>
             <p>On this new chapter of your life, I pray that your path is made smooth and that every dream you are working so hard for comes true. Semoga hari ini dan hari-hari berikutnya kamu banyak senengnya, <i>you deserve all the happiness!</i></p>
-            <p style="font-style: italic; color: #ad1457; margin-top: 15px;">P.S. — Stay as my favorite person, okay? And... don't forget my treats! Happy Birthday, my love. ❤️</p>
+            <p style="font-style: italic; color: #a15c5d; margin-top: 15px;">P.S. — Stay as my favorite person, okay? And... don't forget my treats! Happy Birthday, my love. ❤️</p>
         </div>
     </div>
 
@@ -114,8 +125,14 @@
                 document.getElementById('pin-screen').classList.remove('active');
                 document.getElementById('loading-screen').classList.add('active');
                 
-                audio.play().catch(err => console.log("Audio play blocked"));
-                createHearts();
+                // Memutar musik setelah klik Open (mengatasi kebijakan browser)
+                audio.play().then(() => {
+                    document.getElementById('music-icon').innerText = '🎵';
+                }).catch(err => {
+                    console.log("Audio play blocked", err);
+                });
+
+                startFallingFlowers();
 
                 setTimeout(() => {
                     document.getElementById('loading-screen').classList.remove('active');
@@ -125,8 +142,11 @@
                 alert("PIN salah sayang!");
             }
         }
-        function showMsg(msg) { document.getElementById('flower-msg').innerText = msg; }
-        
+
+        function showMsg(msg) { 
+            document.getElementById('flower-msg').innerText = msg; 
+        }
+
         function toggleMusic() { 
             if (audio.paused) {
                 audio.play();
@@ -137,17 +157,23 @@
             }
         }
 
-        function createHearts() {
-            for(let i=0; i<15; i++) {
-                let heart = document.createElement('div');
-                heart.innerHTML = '❤️';
-                heart.className = 'heart';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                document.getElementById('hearts-container').appendChild(heart);
-            }
+        function startFallingFlowers() {
+            const flowerIcons = ['🌸', '🌺', '🌻', '🌷', '💮'];
+            const container = document.getElementById('falling-flowers-container');
+            
+            setInterval(() => {
+                const flower = document.createElement('div');
+                flower.className = 'falling-flower';
+                flower.innerText = flowerIcons[Math.floor(Math.random() * flowerIcons.length)];
+                flower.style.left = Math.random() * 100 + 'vw';
+                flower.style.animationDuration = (Math.random() * 3 + 4) + 's'; // Durasi jatuh 4-7 detik
+                flower.style.fontSize = (Math.random() * 1 + 1) + 'rem';
+                container.appendChild(flower);
+
+                // Hapus elemen setelah jatuh selesai agar memori tidak penuh
+                setTimeout(() => {
+                    flower.remove();
+                }, 7000);
+            }, 400); // Muncul bunga baru tiap 0.4 detik
         }
     </script>
-</body>
-</html>
-
