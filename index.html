@@ -3,105 +3,308 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Birthday</title>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <title>For You, My Love</title>
   <style>
-    * { box-sizing: border-box; font-family: 'Arial', sans-serif; }
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
     body {
-      margin: 0; min-height: 100vh; display: flex;
-      justify-content: center; align-items: center;
-      background-color: #f4f4f4; padding: 20px;
+      background-color: #2b121e;
+      color: #f7e6eb;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
+    /* Falling Flowers Effect */
+    .flower-fall {
+      position: fixed;
+      top: -10%;
+      font-size: 20px;
+      animation: fall 8s linear infinite;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(115vh) rotate(360deg); opacity: 0; }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      min-height: 100vh;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* SCREEN 1: PASSCODE */
+    #passcode-screen {
+      background: rgba(60, 25, 42, 0.75);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 40px 25px;
+      text-align: center;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    h2.title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 400;
+      margin-bottom: 5px;
+    }
+    p.sub { font-size: 12px; color: #d4a5b8; margin-bottom: 25px; }
+    
+    .dots { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid #d4a5b8; transition: 0.2s; }
+    .dot.active { background: #e882a6; border-color: #e882a6; box-shadow: 0 0 10px #e882a6; }
+
+    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; max-width: 260px; margin: 0 auto; }
+    .key {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .key:active { background: rgba(232, 130, 166, 0.4); transform: scale(0.95); }
+
+    /* SCREEN 2: GIFT */
+    #gift-screen { display: none; text-align: center; }
+    .gift-box {
+      font-size: 80px;
+      cursor: pointer;
+      animation: pulse 1.5s infinite alternate;
+      margin-top: 20px;
+    }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.1); } }
+
+    /* SCREEN 3: MAIN CONTENT */
+    #main-content { display: none; width: 100%; text-align: center; padding-bottom: 50px; }
+    
+    .header-title { font-family: 'Cormorant Garamond', serif; font-size: 38px; margin-top: 30px; }
+    .header-sub { font-size: 11px; letter-spacing: 3px; color: #d4a5b8; text-transform: uppercase; margin-bottom: 30px; }
+
+    /* Bouquet Section */
+    .bouquet-card {
+      background: rgba(60, 25, 42, 0.5);
+      border-radius: 20px;
+      padding: 25px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 30px;
+    }
+    .flowers-grid { display: flex; justify-content: center; gap: 15px; margin: 20px 0; font-size: 28px; }
+    .flower-item { cursor: pointer; transition: 0.3s; }
+    .flower-item:hover { transform: scale(1.3); }
+    
+    .msg-box {
+      min-height: 50px;
+      font-size: 13px;
+      color: #f7d6e0;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    /* Letter Section */
+    .letter-card {
+      background: #fdf8f5;
+      color: #3a2228;
+      border-radius: 15px;
+      padding: 30px 20px;
+      text-align: left;
+      font-family: 'Cormorant Garamond', serif;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .letter-card h3 { font-size: 24px; margin-bottom: 15px; }
+    .letter-card p { font-size: 16px; line-height: 1.6; margin-bottom: 15px; font-family: 'Poppins', sans-serif; font-weight: 300; }
+    
+    /* Music Floating Button */
     .music-btn {
-      position: fixed; top: 15px; right: 15px; background: #333; color: white;
-      border: none; border-radius: 5px; padding: 8px 12px; font-size: 12px;
-      cursor: pointer; z-index: 100;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: #e882a6;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 99;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    .card {
-      background: #ffffff; width: 100%; max-width: 400px; min-height: 400px;
-      padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      display: flex; flex-direction: column; justify-content: space-between;
-    }
-    .slide { display: none; }
-    .slide.active { display: block; animation: fadeIn 0.3s ease; }
-    h1 { color: #333; font-size: 22px; margin-bottom: 10px; }
-    p { color: #666; line-height: 1.5; font-size: 14px; margin-bottom: 15px; }
-    ul { color: #666; font-size: 14px; padding-left: 20px; }
-    .nav-buttons { display: flex; gap: 10px; margin-top: 20px; }
-    button.nav-btn { background: #333; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; flex: 1; }
-    button.nav-btn:disabled { background: #ccc; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
 <body>
 
-  <button class="music-btn" onclick="toggleMusic()" id="musicBtn">🎵 Music</button>
+  <!-- Falling Flowers -->
+  <div id="flower-container"></div>
+
+  <!-- Music -->
+  <button class="music-btn" onclick="toggleMusic()">🎵</button>
   <audio id="bgMusic" loop><source src="lagu.mp3" type="audio/mpeg"></audio>
 
-  <div class="card">
-    <div id="slide-container">
+  <div class="container">
+    
+    <!-- STEP 1: PASSCODE -->
+    <div id="passcode-screen">
+      <div style="font-size: 30px; margin-bottom: 10px;">🌸</div>
+      <h2 class="title">For You, My Love</h2>
       
-      <div class="slide active">
-        <h1>Happy Birthday</h1>
-        <p>Hai, Adek.</p>
-        <p>Iseng bikin ini buat hari ini. Klik next ya.</p>
+      <!-- INI TEKS YANG DIGANTI -->
+      <p class="sub">Sesuai tanggal kamu</p>
+      
+      <div class="dots">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <div class="dot"></div>
       </div>
 
-      <div class="slide">
-        <h1>A few things</h1>
-        <ul>
-          <li>Thanks for being around.</li>
-          <li>Your jokes are actually funny (sometimes).</li>
-          <li>Appreciate everything.</li>
-        </ul>
+      <div class="keypad">
+        <div class="key" onclick="pressKey('1')">1</div>
+        <div class="key" onclick="pressKey('2')">2</div>
+        <div class="key" onclick="pressKey('3')">3</div>
+        <div class="key" onclick="pressKey('4')">4</div>
+        <div class="key" onclick="pressKey('5')">5</div>
+        <div class="key" onclick="pressKey('6')">6</div>
+        <div class="key" onclick="pressKey('7')">7</div>
+        <div class="key" onclick="pressKey('8')">8</div>
+        <div class="key" onclick="pressKey('9')">9</div>
+        <div class="key" onclick="clearKey()">✕</div>
+        <div class="key" onclick="pressKey('0')">0</div>
+        <div class="key" onclick="checkCode()">➔</div>
       </div>
-
-      <div class="slide">
-        <h1>Wish</h1>
-        <p>Semoga di umur baru ini sehat terus, makin lancar urusannya, dan makin bahagia.</p>
-        <p>Terus makin sayang aku, sama bandelnya ilang ya.</p>
-      </div>
-
-      <!-- Slide Penutup Akhir -->
-      <div class="slide">
-        <h1>Sekali lagi... 🎂</h1>
-        <p>Happy level up sayangg!</p>
-        <p>Enjoy ur moment, semoga hari ini banyak senengnya!</p>
-        <p>Eh, jangan lupa traktirannya ya! Haha. ✨</p>
-      </div>
-
+      
+      <!-- HINT NYA DIHILANGKAN BIAR LEBIH MISTERIUS -->
     </div>
 
-    <div class="nav-buttons">
-      <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>Back</button>
-      <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next ➔</button>
+    <!-- STEP 2: GIFT OPENING -->
+    <div id="gift-screen">
+      <p style="font-size: 14px; color: #d4a5b8;">✨ Opening your gift... ✨</p>
+      <div class="gift-box" onclick="openGift()">🎁</div>
+      <p style="font-size: 12px; margin-top: 15px; opacity: 0.7;">(Tap the box to open)</p>
     </div>
+
+    <!-- STEP 3: MAIN AESTHETIC PAGE -->
+    <div id="main-content">
+      <p style="font-size: 18px;">🌸</p>
+      <h1 class="header-title">Happy Birthday Adek</h1>
+      <p class="header-sub">The Most Special Day</p>
+
+      <!-- Digital Bouquet -->
+      <div class="bouquet-card">
+        <p style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #d4a5b8;">A Digital Bouquet</p>
+        <p style="font-size: 12px; margin-top: 5px; opacity: 0.8;">Touch each flower to reveal its message 💕</p>
+        
+        <div class="flowers-grid">
+          <span class="flower-item" onclick="showMsg('🌻 Makasih ya udah selalu nemenin aku terus.')">🌻</span>
+          <span class="flower-item" onclick="showMsg('🌷 Candaan kamu sebenernya lucu kok (kadang-kadang).')">🌷</span>
+          <span class="flower-item" onclick="showMsg('🌹 Sehat terus & makin lancar semua urusannya!')">🌹</span>
+          <span class="flower-item" onclick="showMsg('🌺 Terus makin sayang aku, bandelnya ilang ya.')">🌺</span>
+        </div>
+
+        <div class="msg-box" id="flower-msg">Klik salah satu bunga di atas!</div>
+      </div>
+
+      <!-- Letter -->
+      <div class="letter-card">
+        <h3>A Letter For You</h3>
+        <p><b>Hai Adek,</b></p>
+        <p>Happy level up sayangg! Enjoy ur moment, semoga di umur yang baru ini kamu sehat terus, makin bahagia, dan semua urusan kamu dimudahkan.</p>
+        <p>Makin sayang sama aku ya, terus sifat bandelnya dikurang-kurangin haha. 😜</p>
+        <p>Eh, jangan lupa traktirannya ya! ✨</p>
+        <p style="text-align: right; font-style: italic; margin-top: 20px; font-weight: bold;">— With Love ❤️</p>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const music = document.getElementById('bgMusic');
-    const musicBtn = document.getElementById('musicBtn');
-
-    function toggleMusic() {
-      if (music.paused) { music.play(); musicBtn.innerHTML = "⏸️ Pause"; } 
-      else { music.pause(); musicBtn.innerHTML = "🎵 Music"; }
+    // Falling Flowers Script
+    const container = document.getElementById('flower-container');
+    const flowers = ['🌸', '🌺', '🌼', '🌷'];
+    for(let i=0; i<15; i++) {
+      let f = document.createElement('div');
+      f.className = 'flower-fall';
+      f.innerText = flowers[Math.floor(Math.random()*flowers.length)];
+      f.style.left = Math.random()*100 + 'vw';
+      f.style.animationDuration = (Math.random()*5 + 5) + 's';
+      f.style.animationDelay = Math.random()*5 + 's';
+      container.appendChild(f);
     }
 
-    function changeSlide(direction) {
-      slides[currentSlide].classList.remove('active');
-      currentSlide += direction;
-      slides[currentSlide].classList.add('active');
-      prevBtn.disabled = (currentSlide === 0);
-      if (currentSlide === slides.length - 1) {
-        nextBtn.style.display = 'none';
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-      } else { nextBtn.style.display = 'block'; }
+    // Passcode Logic
+    let code = "";
+    const dots = document.querySelectorAll('.dot');
+    
+    function pressKey(num) {
+      if(code.length < 4) { // Dibatasi 4 angka
+        code += num;
+        updateDots();
+      }
+    }
+    function clearKey() {
+      code = "";
+      updateDots();
+    }
+    function updateDots() {
+      dots.forEach((dot, idx) => {
+        if(idx < code.length) dot.classList.add('active');
+        else dot.classList.remove('active');
+      });
+    }
+    function checkCode() {
+      // INI PASSCODE NYA UDAH JADI 1508
+      if(code === "1508") { 
+        document.getElementById('passcode-screen').style.display = 'none';
+        document.getElementById('gift-screen').style.display = 'block';
+      } else {
+        alert("Kode salah! Coba ingat-ingat lagi sesuai tanggal kamu.");
+        clearKey();
+      }
+    }
+
+    // Gift Logic
+    function openGift() {
+      document.getElementById('gift-screen').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+    }
+
+    // Flower Message Logic
+    function showMsg(msg) {
+      document.getElementById('flower-msg').innerText = msg;
+    }
+
+    // Music Toggle
+    const music = document.getElementById('bgMusic');
+    function toggleMusic() {
+      if(music.paused) music.play();
+      else music.pause();
     }
   </script>
 </body>
 </html>
-
